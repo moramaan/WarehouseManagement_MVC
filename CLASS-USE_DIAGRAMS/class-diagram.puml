@@ -1,0 +1,46 @@
+@startuml
+'left to right direction
+skin rose
+
+package Model {
+    class "ProductModel" as pm {
+        -id: int
+        -name: string
+        -type: TypeModel
+        -location: string
+        -group: string
+        -quantity: int
+        -selfSell: boolean
+        -price: double
+        -total: double
+        +calcTotal()
+    }
+
+    class "TypeModel" as tp {
+        -category: string
+    }
+
+    class "WarehouseModel" as wh {
+        -company: string
+        -list: ProductModel
+    }
+}
+
+package Controller {
+    class AddController
+    class UpdateController
+    class DeleteController
+    class ShowDataController
+}
+
+package View {
+    class MainView
+    class AddView
+}
+
+View --> Model
+Model --> Controller
+Controller --> Model
+
+hide empty members
+@enduml
