@@ -4,10 +4,26 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author moraman
  */
-public class TypeModel {
-    
+public class TypeModel implements Serializable {
+
+    private String category;
+
+    public TypeModel(String category) {
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
 }
