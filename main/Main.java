@@ -4,6 +4,8 @@
  */
 package main;
 
+import controller.MainController;
+
 /**
  *
  * @author moraman
@@ -14,7 +16,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        // Run the app
+        MainController m = new MainController();
     }
     
 }

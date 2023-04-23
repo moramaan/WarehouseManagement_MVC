@@ -4,17 +4,108 @@
  */
 package view;
 
+import controller.AddController;
+import controller.DeleteController;
+import controller.MainController;
+import controller.ShowDataController;
+import controller.UpdateController;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableColumn;
+
 /**
  *
  * @author moraman
  */
 public class MainView extends javax.swing.JFrame {
 
+    private MainController mainCtrl;
+    private ShowDataController showCtrl;
+    private AddController addCtrl;
+    private UpdateController upCtrl;
+    private DeleteController delCtrl;
+
+    public void setShowCtrl(ShowDataController showCtrl) {
+        this.showCtrl = showCtrl;
+    }
+
+    public void setAddCtrl(AddController addCtrl) {
+        this.addCtrl = addCtrl;
+    }
+
+    public void setUpCtrl(UpdateController upCtrl) {
+        this.upCtrl = upCtrl;
+    }
+
+    public void setDelCtrl(DeleteController delCtrl) {
+        this.delCtrl = delCtrl;
+    }
+
     /**
      * Creates new form MainView
+     *
+     * @param mainCtrl
      */
-    public MainView() {
+    public MainView(MainController mainCtrl) {
         initComponents();
+        this.mainCtrl = mainCtrl;
+//        this.showCtrl = mainCtrl.getShowCtrl();
+        filterComboBox.setVisible(false);
+
+    }
+
+    public void setInfo(TableModel tm, String item1, String item2) {
+        dataTable.setModel(tm);
+        if (item1 != null && item2 != null) {
+            filterComboBox.addItem(item1);
+            filterComboBox.addItem(item2);
+        }
+    }
+
+    public void setPreferredOptions() {
+        int columns = dataTable.getColumnCount();
+
+        // Set default window size
+        this.setSize(1350, 650);
+
+        // Set title
+        titleLabel.setText(mainCtrl.getWh().getCompany() + "WAREHOUSE");
+
+        // Set window to center
+        this.setLocationRelativeTo(null);
+
+        // Set default table column width
+        TableColumnModel colModel = dataTable.getColumnModel();
+        for (int i = 0; i < columns; i++) {
+            TableColumn col = colModel.getColumn(i);
+            switch (i) {
+                case 0:
+                    col.setPreferredWidth(60);
+                    break;
+                case 1:
+                    col.setPreferredWidth(460);
+                    break;
+                case 2:
+                case 4:
+                    col.setPreferredWidth(150);
+                    break;
+                case 8:
+                    col.setPreferredWidth(120);
+                    break;
+                default:
+                    col.setPreferredWidth(90);
+            }
+        }
+
+        // Create a default TableCellRenderer to center the content
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+
+        // Set the default cell renderer for all columns
+        for (int i = 0; i < columns; i++) {
+            dataTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
     }
 
     /**
@@ -26,43 +117,47 @@ public class MainView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        titleLabel = new javax.swing.JLabel();
+        addButton = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        copyright = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        dataTable = new javax.swing.JTable();
+        filterButton = new javax.swing.JButton();
+        filterComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(182, 166, 197));
+        setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("CaskaydiaCove Nerd Font Mono SemiBold", 1, 20)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(96, 96, 173));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("TITLE");
+        titleLabel.setFont(new java.awt.Font("CaskaydiaCove Nerd Font Mono SemiBold", 1, 20)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(96, 96, 173));
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titleLabel.setText("TITLE");
 
-        jButton1.setBackground(new java.awt.Color(72, 186, 130));
-        jButton1.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
-        jButton1.setText("Add Item");
+        addButton.setBackground(new java.awt.Color(72, 186, 130));
+        addButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        addButton.setText("Add Item");
 
-        jButton2.setBackground(new java.awt.Color(186, 144, 200));
-        jButton2.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
-        jButton2.setText("Update Item");
-        jButton2.setMaximumSize(new java.awt.Dimension(100, 25));
-        jButton2.setMinimumSize(new java.awt.Dimension(100, 25));
+        editButton.setBackground(new java.awt.Color(186, 144, 200));
+        editButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        editButton.setText("Update Item");
+        editButton.setMaximumSize(new java.awt.Dimension(100, 25));
+        editButton.setMinimumSize(new java.awt.Dimension(100, 25));
 
-        jButton4.setBackground(new java.awt.Color(255, 125, 135));
-        jButton4.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
-        jButton4.setText("Delete Item");
+        deleteButton.setBackground(new java.awt.Color(255, 125, 135));
+        deleteButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        deleteButton.setText("Delete Item");
 
-        jLabel2.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(96, 96, 173));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("David Mora Hidalgo | 2023©");
+        copyright.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
+        copyright.setForeground(new java.awt.Color(96, 96, 173));
+        copyright.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        copyright.setText("David Mora Hidalgo | 2023©");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        dataTable.setBackground(new java.awt.Color(243, 253, 173));
+        dataTable.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 15)); // NOI18N
+        dataTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -79,78 +174,104 @@ public class MainView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(dataTable);
 
-        jButton3.setBackground(new java.awt.Color(94, 191, 236));
-        jButton3.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
-        jButton3.setText("Filter By Type");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        filterButton.setBackground(new java.awt.Color(94, 191, 236));
+        filterButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        filterButton.setText("Filter By Type");
+        filterButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                filterButtonActionPerformed(evt);
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No filter", "Components", "Peripherals", " " }));
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No filter" }));
+        filterComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterComboBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(350, 350, 350))
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1116, Short.MAX_VALUE)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(73, 73, 73))
+                    .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                    .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(filterButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(filterComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(412, 412, 412))
+                .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(494, 494, 494))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(568, 568, 568)
+                .addComponent(copyright, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButton3, jButton4, jComboBox1});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addButton, deleteButton, editButton, filterButton, filterComboBox});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(104, 104, 104)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
+                        .addContainerGap()
+                        .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(25, 25, 25))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(156, 156, 156)
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(deleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(filterButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                .addComponent(copyright)
+                .addGap(22, 22, 22))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jButton2, jButton3, jButton4});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addButton, deleteButton, editButton, filterButton});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        filterComboBox.setVisible(true);
+    }//GEN-LAST:event_filterButtonActionPerformed
+
+    private void filterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterComboBoxActionPerformed
+        // Set Table Model depending on combo box item
+        TableModel tableModel;
+        String selectedItem = filterComboBox.getSelectedItem().toString();
+
+        if (selectedItem != null && !selectedItem.isEmpty()) {
+            if (!selectedItem.equalsIgnoreCase("No Filter")) {
+                tableModel = showCtrl.getWarehouseDataTableFiltered(selectedItem);
+            } else {
+                // IDEA: maybe will be better a reset button, seting the original model again and also setVisible(false) comboFilter and itself (button)
+                tableModel = showCtrl.getWarehouseDataTable();
+                filterComboBox.setVisible(false);
+            }
+//            dataTable.setModel(tableModel);
+            setInfo(tableModel, null, null);
+            setPreferredOptions();
+        }
+    }//GEN-LAST:event_filterComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,20 +303,20 @@ public class MainView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainView().setVisible(true);
+                new MainView(null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton addButton;
+    private javax.swing.JLabel copyright;
+    private javax.swing.JTable dataTable;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JButton editButton;
+    private javax.swing.JButton filterButton;
+    private javax.swing.JComboBox<String> filterComboBox;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel titleLabel;
     // End of variables declaration//GEN-END:variables
 }

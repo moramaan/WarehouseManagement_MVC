@@ -5,7 +5,7 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 /**
  *
@@ -15,15 +15,15 @@ public class WarehouseModel {
 
     private String company;
     private ArrayList<TypeModel> categoryList;
-    private TreeMap<Integer, ProductModel> productsList;
+    private HashMap<Integer, ProductModel> productsList;
 
     public WarehouseModel() {
     }
 
-    public WarehouseModel(String company, ArrayList<TypeModel> categoryList, TreeMap<Integer, ProductModel> productsList) {
+    public WarehouseModel(String company) {
         this.company = company;
-        this.categoryList = categoryList;
-        this.productsList = productsList;
+        this.categoryList = new ArrayList<>();
+        this.productsList = new HashMap<>();
     }
 
     public String getCompany() {
@@ -42,12 +42,27 @@ public class WarehouseModel {
         this.categoryList = categoryList;
     }
 
-    public TreeMap<Integer, ProductModel> getProductsList() {
+    public void addCategory(TypeModel t) {
+        categoryList.add(t);
+    }
+    
+    public HashMap<Integer, ProductModel> getProductsList() {
         return productsList;
     }
 
-    public void setProductsList(TreeMap<Integer, ProductModel> productsList) {
+    public void setProductsList(HashMap<Integer, ProductModel> productsList) {
         this.productsList = productsList;
     }
-
+    
+    public ProductModel getProduct(Integer key) {
+        return productsList.get(key);
+    }
+    
+    public boolean productExists(int code) {
+        return this.productsList.containsKey(code);
+    }
+    
+    public void addProduct (ProductModel p) {
+        this.productsList.put(p.getId(), p);
+    }
 }
