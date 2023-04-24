@@ -15,20 +15,20 @@ import view.MainView;
  *
  * @author moraman
  */
-public class ShowDataController {
+public class DataController {
 
     private WarehouseModel warehouse;
     private MainView mainView;
 
-    public ShowDataController() {
+    public DataController() {
     }
 
-    public ShowDataController(WarehouseModel warehouse, MainView mainView) {
+    public DataController(WarehouseModel warehouse, MainView mainView) {
         this.warehouse = warehouse;
         this.mainView = mainView;
         this.mainView.setInfo(getWarehouseDataTable(),
-                this.warehouse.getCategoryList().get(0).getCategory(),
-                this.warehouse.getCategoryList().get(1).getCategory());
+                this.warehouse.getTypeList().get(0).getName(),
+                this.warehouse.getTypeList().get(1).getName());
         this.mainView.setPreferredOptions();
     }
 
@@ -53,7 +53,7 @@ public class ShowDataController {
 
             row[0] = warehouse.getProduct(key).getId();
             row[1] = warehouse.getProduct(key).getName();
-            row[2] = warehouse.getProduct(key).getType().getCategory();
+            row[2] = warehouse.getProduct(key).getType().getName();
             row[3] = warehouse.getProduct(key).getLocation();
             row[4] = warehouse.getProduct(key).getGroup();
             row[5] = warehouse.getProduct(key).getQuantity();
@@ -90,14 +90,14 @@ public class ShowDataController {
                 orderedProducts.addAll(products);
 
                 for (Integer key : orderedProducts) {
-                    category = warehouse.getProduct(key).getType().getCategory();
+                    category = warehouse.getProduct(key).getType().getName();
 //                System.out.println(category);
                     if (category.equalsIgnoreCase(comboFilter)) {
                         Object[] row = new Object[9];
 
                         row[0] = warehouse.getProduct(key).getId();
                         row[1] = warehouse.getProduct(key).getName();
-                        row[2] = warehouse.getProduct(key).getType().getCategory();
+                        row[2] = warehouse.getProduct(key).getType().getName();
                         row[3] = warehouse.getProduct(key).getLocation();
                         row[4] = warehouse.getProduct(key).getGroup();
                         row[5] = warehouse.getProduct(key).getQuantity();

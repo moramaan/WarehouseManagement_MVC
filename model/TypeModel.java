@@ -12,18 +12,18 @@ import java.io.Serializable;
  */
 public class TypeModel implements Serializable {
 
-    private String category;
+    private String name;
 
-    public TypeModel(String category) {
-        this.category = category;
+    public TypeModel(String name) {
+        this.name = name;
     }
 
-    public String getCategory() {
-        return category;
+    public String getName() {
+        return name;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

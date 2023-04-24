@@ -7,7 +7,7 @@ package view;
 import controller.AddController;
 import controller.DeleteController;
 import controller.MainController;
-import controller.ShowDataController;
+import controller.DataController;
 import controller.UpdateController;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -21,12 +21,12 @@ import javax.swing.table.TableColumn;
 public class MainView extends javax.swing.JFrame {
 
     private MainController mainCtrl;
-    private ShowDataController showCtrl;
+    private DataController showCtrl;
     private AddController addCtrl;
     private UpdateController upCtrl;
     private DeleteController delCtrl;
 
-    public void setShowCtrl(ShowDataController showCtrl) {
+    public void setShowCtrl(DataController showCtrl) {
         this.showCtrl = showCtrl;
     }
 
@@ -139,6 +139,11 @@ public class MainView extends javax.swing.JFrame {
         addButton.setBackground(new java.awt.Color(72, 186, 130));
         addButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
         addButton.setText("Add Item");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
 
         editButton.setBackground(new java.awt.Color(186, 144, 200));
         editButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
@@ -272,6 +277,12 @@ public class MainView extends javax.swing.JFrame {
             setPreferredOptions();
         }
     }//GEN-LAST:event_filterComboBoxActionPerformed
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        // Show Add item dialog form
+        this.setVisible(false);
+        mainCtrl.showAddView();
+    }//GEN-LAST:event_addButtonActionPerformed
 
     /**
      * @param args the command line arguments

@@ -4,18 +4,46 @@
  */
 package view;
 
+import controller.AddController;
+import controller.MainController;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
+
 /**
  *
  * @author moraman
  */
 public class AddView extends javax.swing.JDialog {
 
+    private MainController mainCtrl;
+    private AddController addCtrl;
+
     /**
      * Creates new form AddView
+     *
+     * @param parent
+     * @param modal
+     * @param mainCtrl
      */
-    public AddView(java.awt.Frame parent, boolean modal) {
+    public AddView(java.awt.Frame parent, boolean modal, MainController mainCtrl) {
         super(parent, modal);
+        this.mainCtrl = mainCtrl;
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(AddView.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                mainCtrl.setMainViewVisible();
+                e.getWindow().dispose();
+            }
+        });
+    }
+
+    public void setAddCtrl(AddController addCtrl) {
+        this.addCtrl = addCtrl;
     }
 
     /**
@@ -34,19 +62,19 @@ public class AddView extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        codeTextField = new javax.swing.JTextField();
+        nameTextField = new javax.swing.JTextField();
+        locationTextField = new javax.swing.JTextField();
+        qtyTextField = new javax.swing.JTextField();
+        priceTextField = new javax.swing.JTextField();
+        typeComboBox = new javax.swing.JComboBox<>();
+        topSellerRadioBtn = new javax.swing.JRadioButton();
+        normalRadioBtn = new javax.swing.JRadioButton();
+        newArrivalRadioBtn = new javax.swing.JRadioButton();
         addTitle = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        selfSellCheckBox = new javax.swing.JCheckBox();
+        saveButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -68,50 +96,60 @@ public class AddView extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
         jLabel6.setText("P.V.P");
 
-        jTextField1.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        codeTextField.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        codeTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                codeTextFieldActionPerformed(evt);
             }
         });
 
-        jTextField2.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        nameTextField.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
 
-        jTextField4.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        locationTextField.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
 
-        jTextField5.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        qtyTextField.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
 
-        jTextField6.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        priceTextField.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
 
-        jComboBox1.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- select -" }));
+        typeComboBox.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- select -" }));
 
-        buttonGroup.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
-        jRadioButton1.setText("Top Seller");
+        buttonGroup.add(topSellerRadioBtn);
+        topSellerRadioBtn.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
+        topSellerRadioBtn.setText("Top Seller");
 
-        buttonGroup.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
-        jRadioButton2.setText("Normal");
+        buttonGroup.add(normalRadioBtn);
+        normalRadioBtn.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
+        normalRadioBtn.setText("Normal");
 
-        buttonGroup.add(jRadioButton3);
-        jRadioButton3.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
-        jRadioButton3.setText("New");
+        buttonGroup.add(newArrivalRadioBtn);
+        newArrivalRadioBtn.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
+        newArrivalRadioBtn.setText("New Arrival");
 
         addTitle.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 20)); // NOI18N
         addTitle.setForeground(new java.awt.Color(96, 96, 173));
         addTitle.setText("Adding Item");
 
-        jCheckBox1.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
-        jCheckBox1.setText("Self Sell");
+        selfSellCheckBox.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
+        selfSellCheckBox.setText("Self Sell");
 
-        jButton1.setBackground(new java.awt.Color(183, 211, 164));
-        jButton1.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
-        jButton1.setText("Save");
+        saveButton.setBackground(new java.awt.Color(183, 211, 164));
+        saveButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
+        saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setBackground(new java.awt.Color(176, 81, 96));
-        jButton2.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
-        jButton2.setText("Cancel");
+        cancelButton.setBackground(new java.awt.Color(176, 81, 96));
+        cancelButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,31 +171,31 @@ public class AddView extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(saveButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
+                        .addComponent(cancelButton))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                            .addComponent(priceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(qtyTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(locationTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(codeTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(typeComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton3)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jCheckBox1))
+                    .addComponent(topSellerRadioBtn)
+                    .addComponent(newArrivalRadioBtn)
+                    .addComponent(normalRadioBtn)
+                    .addComponent(selfSellCheckBox))
                 .addGap(58, 58, 58))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jComboBox1, jTextField1, jTextField2, jTextField4, jTextField5, jTextField6});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {codeTextField, locationTextField, nameTextField, priceTextField, qtyTextField, typeComboBox});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, saveButton});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,52 +207,71 @@ public class AddView extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(codeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(locationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(qtyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(priceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jRadioButton2)
+                        .addComponent(normalRadioBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton3)
+                        .addComponent(newArrivalRadioBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton1)
+                        .addComponent(topSellerRadioBtn)
                         .addGap(58, 58, 58)
-                        .addComponent(jCheckBox1)
+                        .addComponent(selfSellCheckBox)
                         .addGap(21, 21, 21)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(saveButton)
+                    .addComponent(cancelButton))
                 .addGap(35, 35, 35))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jComboBox1, jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jTextField1, jTextField2, jTextField4, jTextField5, jTextField6});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {codeTextField, jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, locationTextField, nameTextField, priceTextField, qtyTextField, typeComboBox});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void codeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codeTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_codeTextFieldActionPerformed
+
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        this.setVisible(false);
+        mainCtrl.setMainViewVisible();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        // Reset all fields when is saved
+        addCtrl.resetFields();
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    public ButtonGroup getBtnGroup() {
+        return buttonGroup;
+    }
+
+    public JComboBox getComboBox() {
+        return typeComboBox;
+    }
 
     /**
      * @param args the command line arguments
@@ -246,7 +303,7 @@ public class AddView extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddView dialog = new AddView(new javax.swing.JFrame(), true);
+                AddView dialog = new AddView(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -261,23 +318,23 @@ public class AddView extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel addTitle;
     private javax.swing.ButtonGroup buttonGroup;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JTextField codeTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField locationTextField;
+    private javax.swing.JTextField nameTextField;
+    private javax.swing.JRadioButton newArrivalRadioBtn;
+    private javax.swing.JRadioButton normalRadioBtn;
+    private javax.swing.JTextField priceTextField;
+    private javax.swing.JTextField qtyTextField;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JCheckBox selfSellCheckBox;
+    private javax.swing.JRadioButton topSellerRadioBtn;
+    private javax.swing.JComboBox<String> typeComboBox;
     // End of variables declaration//GEN-END:variables
 }

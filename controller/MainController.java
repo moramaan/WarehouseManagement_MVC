@@ -7,6 +7,7 @@ package controller;
 import model.ProductModel;
 import model.TypeModel;
 import model.WarehouseModel;
+import view.AddView;
 import view.MainView;
 
 /**
@@ -16,17 +17,18 @@ import view.MainView;
 public class MainController {
 
     private AddController addCtrl;
-    private ShowDataController showCtrl;
+    private DataController showCtrl;
     private UpdateController upCtrl;
     private DeleteController delCtrl;
     private WarehouseModel wh;
     private MainView mainView;
+    private AddView addView;
 
     public MainController() {
         this.wh = initWarehouse();
         this.mainView = new MainView(this);
-        this.addCtrl = new AddController();
-        this.showCtrl = new ShowDataController(wh, mainView);
+        this.addCtrl = new AddController(this);
+        this.showCtrl = new DataController(wh, mainView);
         this.upCtrl = new UpdateController();
         this.delCtrl = new DeleteController();
         setMainViewControllers();
@@ -38,8 +40,8 @@ public class MainController {
         WarehouseModel warehouse = new WarehouseModel("PC PARTS Ltd.");
         TypeModel type1 = new TypeModel("Hardware");
         TypeModel type2 = new TypeModel("Peripherals");
-        warehouse.addCategory(type1);
-        warehouse.addCategory(type2);
+        warehouse.addType(type1);
+        warehouse.addType(type2);
 
         ProductModel p1 = new ProductModel(1, "Asus B550-F WI-FI", type1, "S1P2", "Top Seller", 354, true, 170.99);
         ProductModel p2 = new ProductModel(2, "AMD Ryzen 9 5900X", type1, "S1P3", "Top Seller", 78, true, 549.99);
@@ -104,10 +106,10 @@ public class MainController {
         warehouse.addProduct(p28);
         warehouse.addProduct(p29);
         warehouse.addProduct(p30);
-
+        
         return warehouse;
     }
-
+   
     public void setMainViewControllers() {
         mainView.setShowCtrl(showCtrl);
         mainView.setAddCtrl(addCtrl);
@@ -115,11 +117,24 @@ public class MainController {
         mainView.setDelCtrl(delCtrl);
     }
 
+    public void showAddView() {
+        this.addView = new AddView(mainView, true, this);
+        addCtrl.setAddView(addView);
+        addCtrl.setWh(wh);
+        addView.setAddCtrl(addCtrl);
+        addCtrl.setAddViewComboItems(addView.getComboBox());
+        addView.setVisible(true);
+    }
+    
+    public void setMainViewVisible() {
+        mainView.setVisible(true);
+    }
+
 //    public AddController getAddCtrl() {
 //        return addCtrl;
 //    }
 //
-//    public ShowDataController getShowCtrl() {
+//    public DataController getShowCtrl() {
 //        return showCtrl;
 //    }
 //
@@ -130,7 +145,6 @@ public class MainController {
 //    public DeleteController getDelCtrl() {
 //        return delCtrl;
 //    }
-
     public WarehouseModel getWh() {
         return wh;
     }

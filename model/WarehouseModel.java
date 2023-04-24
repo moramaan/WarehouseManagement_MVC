@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class WarehouseModel {
 
     private String company;
-    private ArrayList<TypeModel> categoryList;
+    private ArrayList<TypeModel> typeList;
     private HashMap<Integer, ProductModel> productsList;
 
     public WarehouseModel() {
@@ -22,7 +22,7 @@ public class WarehouseModel {
 
     public WarehouseModel(String company) {
         this.company = company;
-        this.categoryList = new ArrayList<>();
+        this.typeList = new ArrayList<>();
         this.productsList = new HashMap<>();
     }
 
@@ -34,16 +34,16 @@ public class WarehouseModel {
         this.company = company;
     }
 
-    public ArrayList<TypeModel> getCategoryList() {
-        return categoryList;
+    public ArrayList<TypeModel> getTypeList() {
+        return typeList;
     }
 
-    public void setCategoryList(ArrayList<TypeModel> categoryList) {
-        this.categoryList = categoryList;
+    public void setTypeList(ArrayList<TypeModel> TypeList) {
+        this.typeList = TypeList;
     }
 
-    public void addCategory(TypeModel t) {
-        categoryList.add(t);
+    public void addType(TypeModel t) {
+        typeList.add(t);
     }
     
     public HashMap<Integer, ProductModel> getProductsList() {
