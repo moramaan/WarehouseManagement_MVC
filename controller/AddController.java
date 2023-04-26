@@ -5,7 +5,9 @@
 package controller;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import javax.swing.*;
+import model.ProductModel;
 import model.TypeModel;
 import model.WarehouseModel;
 import view.AddView;
@@ -16,14 +18,18 @@ import view.AddView;
  */
 public class AddController {
 
-    private AddView addView;
     private MainController mainCtrl;
     private WarehouseModel wh;
-
+    private AddView addView;
+    private DataController dataCtrl;
 
     public AddController(MainController mainCtrl) {
         this.mainCtrl = mainCtrl;
-        
+
+    }
+
+    public void setDataCtrl(DataController dataCtrl) {
+        this.dataCtrl = dataCtrl;
     }
 
     public void setAddView(AddView addView) {
@@ -33,31 +39,28 @@ public class AddController {
     public void setWh(WarehouseModel wh) {
         this.wh = wh;
     }
-    
+
     public void setAddViewComboItems(JComboBox cb) {
         for (TypeModel tm : wh.getTypeList()) {
             cb.addItem(tm.getName());
         }
     }
-    
-    /**
-     * Reset all fields of the Add View to our default values.
-     */
-    public void resetFields() {
-        Component[] components = addView.getContentPane().getComponents();
-        for (Component component : components) {
-            if (component instanceof JTextField) {
-                JTextField field = (JTextField) component;
-                field.setText("");
-            } else if (component instanceof JCheckBox) {
-                JCheckBox checkBox = (JCheckBox) component;
-                checkBox.setSelected(false);
-            } else if (component instanceof JComboBox) {
-                JComboBox comboBox = (JComboBox) component;
-                comboBox.setSelectedIndex(0);
-            }
-        }
-        addView.getBtnGroup().clearSelection();
-    }
 
+    /**
+     * It picks all form info, create a new ProductModel instance with it and
+     * put product into Warehouse productsList.
+     */
+    public boolean saveNewItem() {
+        mainCtrl.setDataCtrlToAddCtrl();
+        boolean done = false;
+        ProductModel item = new ProductModel();
+        item = dataCtrl.craftNewProductModel();
+
+        if (item != null) {
+            done = true;
+            wh.addProduct(item);
+        }
+
+        return done;
+    }
 }

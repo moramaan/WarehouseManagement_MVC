@@ -4,11 +4,15 @@
  */
 package controller;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import model.ProductModel;
+import model.TypeModel;
 import model.WarehouseModel;
+import view.AddView;
 import view.MainView;
 
 /**
@@ -19,6 +23,7 @@ public class DataController {
 
     private WarehouseModel warehouse;
     private MainView mainView;
+    private AddView addView;
 
     public DataController() {
     }
@@ -30,6 +35,10 @@ public class DataController {
                 this.warehouse.getTypeList().get(0).getName(),
                 this.warehouse.getTypeList().get(1).getName());
         this.mainView.setPreferredOptions();
+    }
+
+    public void setAddView(AddView addView) {
+        this.addView = addView;
     }
 
     public TableModel getWarehouseDataTable() {
@@ -116,8 +125,180 @@ public class DataController {
             return tm;
         }
     }
-    
-    public void dummyMethod (String num) {
-        System.out.println("Dummy test show data controller" + num);
+
+    public void setNewMainViewTableModel() {
+        mainView.getDataTable().setModel(getWarehouseDataTable());
+        mainView.setPreferredOptions();
+    }
+
+    /**
+     * Method to chech if userCode is valid or not.
+     *
+     * @param code item/productCode from the form textField.
+     * @return int 0 to 2. 0 code is valid | 1 is not an Integer | 2 repeated
+     * code, exists in warehouse products list.
+     */
+    public int checkCode(String code) {
+        boolean validCode;
+        int result = 0;
+
+        validCode = isInteger(code);
+        if (!validCode) {
+            result = 1;
+        } else {
+            validCode = warehouse.productExists(Integer.parseInt(code));
+            if (validCode) {
+                result = 2;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * This method does the validation of a given text length.
+     *
+     * @param txt given text to check.
+     * @param max maximum length permitted.
+     * @param min minimum length allowed.
+     * @return 0 accepted, 1 > too small, 2 > too big.
+     */
+    public int checkLength(String txt, int max, int min) {
+        boolean valid;
+        int result = 0;
+        valid = txt.length() >= min;
+        if (!valid) {
+            result = 1;
+        } else {
+            valid = txt.length() <= max;
+            if (!valid) {
+                result = 2;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Method to check if a given String is an Integer.
+     *
+     * @param txt String to check.
+     * @return true if It is Integer.
+     */
+    public boolean isInteger(String txt) {
+        boolean isInt = true;
+        try {
+            int parsed = Integer.parseInt(txt);
+        } catch (Exception e) {
+            isInt = false;
+        }
+
+        return isInt;
+    }
+
+    /**
+     * Method to check if a given String is an Integer and also 
+     * if is between the setted bounds.
+     * @param txt value to be checked
+     * @param min lowerBound
+     * @param max upperBound
+     * @return 
+     */
+    public int isInteger(String txt, int min, int max) {
+        boolean valid = true;
+        int result, parsed;
+        result = parsed = 0;
+        try {
+            parsed = Integer.parseInt(txt);
+        } catch (Exception e) {
+            valid = false;
+            result = 1;
+        }
+        if (valid) {
+            valid = parsed >= min;
+            if (!valid) {
+                result = 2; // too small
+            } else {
+                valid = parsed <= max;
+                if (!valid) {
+                    result = 3; // too big
+                }
+            }
+        }
+        return result;
+    }
+
+    public int isDouble(String txt, double min, double max) {
+        boolean valid = true;
+        int result = 0;
+        double parsed = 0;
+        try {
+            parsed = Double.parseDouble(txt);
+        } catch (Exception e) {
+            valid = false;
+            result = 1; // is not a double
+        }
+        if (valid) {
+            valid = parsed >= min;
+            if (!valid) {
+                result = 2; // too small
+            } else {
+                valid = parsed <= max;
+                if (!valid) {
+                    result = 3; // too big
+                }
+            }
+        }
+        return result;
+    }
+
+    public ProductModel craftNewProductModel() {
+        TypeModel tm = null;
+        ProductModel pm = null;
+        boolean selfSell = false;
+        double price = 0;
+        ArrayList<Object> addViewDataList = addView.getAddViewData();
+        String name, type, location, category;
+        int code, qty;
+
+        name = type = location = category = "";
+        code = qty = 0;
+
+        try {
+            for (Object o : addViewDataList) {
+                switch (addViewDataList.indexOf(o)) {
+                    case 0:
+                        code = Integer.parseInt(o.toString());
+                        break;
+                    case 1:
+                        name = o.toString();
+                        break;
+                    case 2:
+                        type = o.toString();
+                        break;
+                    case 3:
+                        location = o.toString();
+                        break;
+                    case 4:
+                        category = o.toString();
+                        break;
+                    case 5:
+                        qty = Integer.parseInt(o.toString());
+                        break;
+                    case 6:
+                        selfSell = Boolean.parseBoolean(o.toString());
+                        break;
+                    default:
+                        price = Double.parseDouble(o.toString());
+
+                }
+            }
+            tm = new TypeModel(type);
+            pm = new ProductModel(code, name, tm, location, category, qty, selfSell, price);
+        } catch (Exception e) {
+            System.out.println("craftModel Method" + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return pm;
     }
 }

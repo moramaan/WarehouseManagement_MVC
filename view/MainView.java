@@ -9,6 +9,7 @@ import controller.DeleteController;
 import controller.MainController;
 import controller.DataController;
 import controller.UpdateController;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -26,6 +27,19 @@ public class MainView extends javax.swing.JFrame {
     private UpdateController upCtrl;
     private DeleteController delCtrl;
 
+    /**
+     * Creates new form MainView
+     *
+     * @param mainCtrl
+     */
+    public MainView(MainController mainCtrl) {
+        initComponents();
+        this.mainCtrl = mainCtrl;
+//        this.showCtrl = mainCtrl.getShowCtrl();
+        filterComboBox.setVisible(false);
+
+    }
+
     public void setShowCtrl(DataController showCtrl) {
         this.showCtrl = showCtrl;
     }
@@ -42,17 +56,8 @@ public class MainView extends javax.swing.JFrame {
         this.delCtrl = delCtrl;
     }
 
-    /**
-     * Creates new form MainView
-     *
-     * @param mainCtrl
-     */
-    public MainView(MainController mainCtrl) {
-        initComponents();
-        this.mainCtrl = mainCtrl;
-//        this.showCtrl = mainCtrl.getShowCtrl();
-        filterComboBox.setVisible(false);
-
+    public JTable getDataTable() {
+        return dataTable;
     }
 
     public void setInfo(TableModel tm, String item1, String item2) {
@@ -106,6 +111,9 @@ public class MainView extends javax.swing.JFrame {
         for (int i = 0; i < columns; i++) {
             dataTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
+
+        // Set table not editable
+        dataTable.setDefaultEditor(Object.class, null);
     }
 
     /**

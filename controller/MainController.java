@@ -17,7 +17,7 @@ import view.MainView;
 public class MainController {
 
     private AddController addCtrl;
-    private DataController showCtrl;
+    private DataController dataCtrl;
     private UpdateController upCtrl;
     private DeleteController delCtrl;
     private WarehouseModel wh;
@@ -28,7 +28,7 @@ public class MainController {
         this.wh = initWarehouse();
         this.mainView = new MainView(this);
         this.addCtrl = new AddController(this);
-        this.showCtrl = new DataController(wh, mainView);
+        this.dataCtrl = new DataController(wh, mainView);
         this.upCtrl = new UpdateController();
         this.delCtrl = new DeleteController();
         setMainViewControllers();
@@ -106,12 +106,12 @@ public class MainController {
         warehouse.addProduct(p28);
         warehouse.addProduct(p29);
         warehouse.addProduct(p30);
-        
+
         return warehouse;
     }
-   
+
     public void setMainViewControllers() {
-        mainView.setShowCtrl(showCtrl);
+        mainView.setShowCtrl(dataCtrl);
         mainView.setAddCtrl(addCtrl);
         mainView.setUpCtrl(upCtrl);
         mainView.setDelCtrl(delCtrl);
@@ -122,11 +122,19 @@ public class MainController {
         addCtrl.setAddView(addView);
         addCtrl.setWh(wh);
         addView.setAddCtrl(addCtrl);
+        addView.setDataCtrl(dataCtrl);
+        dataCtrl.setAddView(addView);
         addCtrl.setAddViewComboItems(addView.getComboBox());
         addView.setVisible(true);
+
     }
-    
+
+    public void setDataCtrlToAddCtrl() {
+        addCtrl.setDataCtrl(dataCtrl);
+    }
+
     public void setMainViewVisible() {
+        dataCtrl.setNewMainViewTableModel();
         mainView.setVisible(true);
     }
 
