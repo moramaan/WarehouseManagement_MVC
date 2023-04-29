@@ -33,7 +33,7 @@
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="addButton" linkSize="4" pref="110" max="32767" attributes="0"/>
-                  <Component id="editButton" linkSize="4" pref="111" max="32767" attributes="0"/>
+                  <Component id="updateButton" linkSize="4" pref="111" max="32767" attributes="0"/>
                   <Component id="deleteButton" linkSize="4" max="32767" attributes="0"/>
                   <Component id="filterButton" linkSize="4" max="32767" attributes="0"/>
                   <Component id="filterComboBox" linkSize="4" alignment="1" min="-2" pref="132" max="-2" attributes="0"/>
@@ -66,7 +66,7 @@
                       <EmptySpace min="-2" pref="156" max="-2" attributes="0"/>
                       <Component id="addButton" linkSize="2" min="-2" pref="43" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="editButton" linkSize="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="updateButton" linkSize="2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="deleteButton" linkSize="2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -109,7 +109,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="editButton">
+    <Component class="javax.swing.JButton" name="updateButton">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="c8" green="90" red="ba" type="rgb"/>
@@ -125,6 +125,9 @@
           <Dimension value="[100, 25]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="deleteButton">
       <Properties>
@@ -136,6 +139,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Delete Item"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="copyright">
       <Properties>

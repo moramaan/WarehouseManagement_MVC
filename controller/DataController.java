@@ -7,12 +7,13 @@ package controller;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import model.ProductModel;
 import model.TypeModel;
 import model.WarehouseModel;
-import view.AddView;
+import view.FormView;
 import view.MainView;
 
 /**
@@ -23,25 +24,26 @@ public class DataController {
 
     private WarehouseModel warehouse;
     private MainView mainView;
-    private AddView addView;
+    private FormView addView;
 
     public DataController() {
     }
 
-    public DataController(WarehouseModel warehouse, MainView mainView) {
+    public DataController(WarehouseModel warehouse, MainView mainView, boolean initLoadDone) {
         this.warehouse = warehouse;
         this.mainView = mainView;
-        this.mainView.setInfo(getWarehouseDataTable(),
+        this.mainView.setData(true, false, getWarehouseDataTable(initLoadDone),
                 this.warehouse.getTypeList().get(0).getName(),
                 this.warehouse.getTypeList().get(1).getName());
         this.mainView.setPreferredOptions();
     }
 
-    public void setAddView(AddView addView) {
+    public void setAddView(FormView addView) {
         this.addView = addView;
     }
 
-    public TableModel getWarehouseDataTable() {
+    public TableModel getWarehouseDataTable(boolean initLoadDone) {
+
         TreeSet<Integer> orderedProducts = new TreeSet<>();
         Set<Integer> products = warehouse.getProductsList().keySet();
         orderedProducts.addAll(products);
@@ -57,28 +59,31 @@ public class DataController {
         tm.addColumn("Unit Price");
         tm.addColumn("Total");
 
-        for (Integer key : orderedProducts) {
-            Object[] row = new Object[9];
+        if (initLoadDone) {
 
-            row[0] = warehouse.getProduct(key).getId();
-            row[1] = warehouse.getProduct(key).getName();
-            row[2] = warehouse.getProduct(key).getType().getName();
-            row[3] = warehouse.getProduct(key).getLocation();
-            row[4] = warehouse.getProduct(key).getGroup();
-            row[5] = warehouse.getProduct(key).getQuantity();
-            row[6] = warehouse.getProduct(key).isSelfSell();
-            row[7] = warehouse.getProduct(key).getUnitPrice();
-            row[8] = warehouse.getProduct(key).getTotal();
+            for (Integer key : orderedProducts) {
+                Object[] row = new Object[9];
 
-            // Se añade al modelo la fila completa.     
-            tm.addRow(row);
+                row[0] = warehouse.getProduct(key).getId();
+                row[1] = warehouse.getProduct(key).getName();
+                row[2] = warehouse.getProduct(key).getType().getName();
+                row[3] = warehouse.getProduct(key).getLocation();
+                row[4] = warehouse.getProduct(key).getGroup();
+                row[5] = warehouse.getProduct(key).getQuantity();
+                row[6] = warehouse.getProduct(key).isSelfSell();
+                row[7] = warehouse.getProduct(key).getUnitPrice();
+                row[8] = warehouse.getProduct(key).getTotal();
+
+                // Se añade al modelo la fila completa.     
+                tm.addRow(row);
+            }
         }
         return tm;
     }
 
     public TableModel getWarehouseDataTableFiltered(String comboFilter) {
         if (comboFilter == null || comboFilter.isEmpty()) {
-            return getWarehouseDataTable();
+            return getWarehouseDataTable(true);
         } else {
 
             DefaultTableModel tm = new DefaultTableModel();
@@ -127,7 +132,7 @@ public class DataController {
     }
 
     public void setNewMainViewTableModel() {
-        mainView.getDataTable().setModel(getWarehouseDataTable());
+        mainView.getDataTable().setModel(getWarehouseDataTable(true));
         mainView.setPreferredOptions();
     }
 
@@ -196,12 +201,13 @@ public class DataController {
     }
 
     /**
-     * Method to check if a given String is an Integer and also 
-     * if is between the setted bounds.
+     * Method to check if a given String is an Integer and also if is between
+     * the setted bounds.
+     *
      * @param txt value to be checked
      * @param min lowerBound
      * @param max upperBound
-     * @return 
+     * @return
      */
     public int isInteger(String txt, int min, int max) {
         boolean valid = true;
@@ -251,12 +257,18 @@ public class DataController {
         return result;
     }
 
+    public void setFormComboItems(JComboBox cb) {
+        for (TypeModel tm : warehouse.getTypeList()) {
+            cb.addItem(tm.getName());
+        }
+    }
+
     public ProductModel craftNewProductModel() {
         TypeModel tm = null;
         ProductModel pm = null;
         boolean selfSell = false;
         double price = 0;
-        ArrayList<Object> addViewDataList = addView.getAddViewData();
+        ArrayList<Object> addViewDataList = addView.getFormViewData();
         String name, type, location, category;
         int code, qty;
 
@@ -300,5 +312,9 @@ public class DataController {
         }
 
         return pm;
+    }
+
+    public boolean deleteProduct(int productId) {
+        return warehouse.deleteProduct(productId);
     }
 }

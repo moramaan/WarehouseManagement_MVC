@@ -7,6 +7,7 @@ package view;
 import controller.AddController;
 import controller.DataController;
 import controller.MainController;
+import controller.UpdateController;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.WindowEvent;
@@ -23,11 +24,14 @@ import javax.swing.JTextField;
  *
  * @author moraman
  */
-public class AddView extends javax.swing.JDialog {
+public class FormView extends javax.swing.JDialog {
 
     private MainController mainCtrl;
     private AddController addCtrl;
     private DataController dataCtrl;
+    private UpdateController upCtrl;
+    private int formMode;
+    private boolean initLoadDone;
 
     /**
      * Creates new form AddView
@@ -35,34 +39,38 @@ public class AddView extends javax.swing.JDialog {
      * @param parent
      * @param modal
      * @param mainCtrl
+     * @param mode
+     * @param initLoadDone
      */
-    public AddView(java.awt.Frame parent, boolean modal, MainController mainCtrl) {
+    public FormView(java.awt.Frame parent, boolean modal, MainController mainCtrl, int mode, boolean initLoadDone) {
         super(parent, modal);
         this.mainCtrl = mainCtrl;
+        this.formMode = mode;
+        this.initLoadDone = initLoadDone;
         initComponents();
         setDefaultConfig();
     }
 
-    public void setAddCtrl(AddController addCtrl) {
-        this.addCtrl = addCtrl;
-    }
-
-    public void setDataCtrl(DataController dataCtrl) {
-        this.dataCtrl = dataCtrl;
-    }
-
+    /**
+     * This method set the desired config depending on mode attribute.
+     */
     public void setDefaultConfig() {
-        normalRadioBtn.setSelected(true);
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(AddView.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(FormView.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                dataCtrl.setNewMainViewTableModel();
                 mainCtrl.setMainViewVisible();
                 e.getWindow().dispose();
             }
         });
+
+        if (formMode == 1) {
+            formTitle.setText("Adding Item");
+            normalRadioBtn.setSelected(true);
+        } else {
+            formTitle.setText("Updating Item");
+        }
     }
 
     public void resetData() {
@@ -111,7 +119,7 @@ public class AddView extends javax.swing.JDialog {
         topSellerRadioBtn = new javax.swing.JRadioButton();
         normalRadioBtn = new javax.swing.JRadioButton();
         newArrivalRadioBtn = new javax.swing.JRadioButton();
-        addTitle = new javax.swing.JLabel();
+        formTitle = new javax.swing.JLabel();
         selfSellCheckBox = new javax.swing.JCheckBox();
         saveButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
@@ -146,11 +154,6 @@ public class AddView extends javax.swing.JDialog {
         codeTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 codeTextFieldFocusLost(evt);
-            }
-        });
-        codeTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                codeTextFieldActionPerformed(evt);
             }
         });
 
@@ -202,9 +205,9 @@ public class AddView extends javax.swing.JDialog {
         newArrivalRadioBtn.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
         newArrivalRadioBtn.setText("New Arrival");
 
-        addTitle.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 20)); // NOI18N
-        addTitle.setForeground(new java.awt.Color(96, 96, 173));
-        addTitle.setText("Adding Item");
+        formTitle.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 20)); // NOI18N
+        formTitle.setForeground(new java.awt.Color(96, 96, 173));
+        formTitle.setText("TITLE");
 
         selfSellCheckBox.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
         selfSellCheckBox.setText("Self Sell");
@@ -301,8 +304,8 @@ public class AddView extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(addTitle)
-                .addGap(262, 262, 262))
+                .addComponent(formTitle)
+                .addGap(264, 264, 264))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6});
@@ -316,9 +319,9 @@ public class AddView extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(addTitle)
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addComponent(formTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,23 +381,37 @@ public class AddView extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void codeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_codeTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_codeTextFieldActionPerformed
-
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        this.setVisible(false);
+        if (formMode == 1) {
+        }
         mainCtrl.setMainViewVisible();
+        this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        boolean saved = addCtrl.saveNewItem();
+        boolean saved;
+        String msg;
+
+        if (formMode == 1) {
+            saved = addCtrl.saveNewItem();
+            msg = "Added item: " + codeTextField.getText();
+        } else {
+            saved = upCtrl.saveUpdatedItem();
+            msg = "Updated item: " + codeTextField.getText();
+        }
 
         if (saved) {
-            String msg = "Added item: " + codeTextField.getText();
-            JOptionPane.showMessageDialog(this, msg, "¡SAVED!", JOptionPane.INFORMATION_MESSAGE);
+            mainCtrl.saveFile(initLoadDone);
+            if (formMode == 1) {
+                resetData();
+            } else {
+                mainCtrl.setMainViewVisible();
+                this.dispose();
+            }
 
-            resetData();
+        } else {
+            msg = "Something went wrong...";
+            JOptionPane.showMessageDialog(this, msg, "¡FAILED!", JOptionPane.HEIGHT);
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 
@@ -404,7 +421,7 @@ public class AddView extends javax.swing.JDialog {
      * @return A list with the next: [code, name, type, location, category, qty,
      * bool selfSell, price]
      */
-    public ArrayList<Object> getAddViewData() {
+    public ArrayList<Object> getFormViewData() {
         ArrayList<Object> addViewDataList = new ArrayList<>();
         String category;
 
@@ -556,6 +573,22 @@ public class AddView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_priceTextFieldFocusLost
 
+    public int getFormMode() {
+        return formMode;
+    }
+
+    public void setUpCtrl(UpdateController upCtrl) {
+        this.upCtrl = upCtrl;
+    }
+
+    public void setAddCtrl(AddController addCtrl) {
+        this.addCtrl = addCtrl;
+    }
+
+    public void setDataCtrl(DataController dataCtrl) {
+        this.dataCtrl = dataCtrl;
+    }
+
     public ButtonGroup getBtnGroup() {
         return buttonGroup;
     }
@@ -592,6 +625,14 @@ public class AddView extends javax.swing.JDialog {
         return normalRadioBtn;
     }
 
+    public JRadioButton getNewArrivalRadioBtn() {
+        return newArrivalRadioBtn;
+    }
+
+    public JRadioButton getTopSellerRadioBtn() {
+        return topSellerRadioBtn;
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -609,20 +650,21 @@ public class AddView extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddView dialog = new AddView(new javax.swing.JFrame(), true, null);
+                FormView dialog = new FormView(new javax.swing.JFrame(), true, null, 0, true); // doubt with this 0, could be 1 or 2?
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -635,11 +677,11 @@ public class AddView extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel addTitle;
     private javax.swing.ButtonGroup buttonGroup;
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel codeLabel;
     private javax.swing.JTextField codeTextField;
+    private javax.swing.JLabel formTitle;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

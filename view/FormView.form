@@ -95,17 +95,17 @@
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="addTitle" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="262" max="-2" attributes="0"/>
+              <Component id="formTitle" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="264" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="addTitle" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="formTitle" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="18" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -234,7 +234,6 @@
       </Properties>
       <Events>
         <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="codeTextFieldFocusLost"/>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="codeTextFieldActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="nameTextField">
@@ -328,7 +327,7 @@
         <Property name="text" type="java.lang.String" value="New Arrival"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="addTitle">
+    <Component class="javax.swing.JLabel" name="formTitle">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="CaskaydiaCove Nerd Font" size="20" style="0"/>
@@ -336,7 +335,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ad" green="60" red="60" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Adding Item"/>
+        <Property name="text" type="java.lang.String" value="TITLE"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="selfSellCheckBox">

@@ -4,11 +4,12 @@
  */
 package view;
 
-import controller.AddController;
 import controller.DeleteController;
 import controller.MainController;
 import controller.DataController;
-import controller.UpdateController;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -22,34 +23,31 @@ import javax.swing.table.TableColumn;
 public class MainView extends javax.swing.JFrame {
 
     private MainController mainCtrl;
-    private DataController showCtrl;
-    private AddController addCtrl;
-    private UpdateController upCtrl;
+    private DataController dataCtrl;
     private DeleteController delCtrl;
+    private boolean initLoadDone;
 
     /**
      * Creates new form MainView
      *
      * @param mainCtrl
+     * @param initLoadDone
      */
-    public MainView(MainController mainCtrl) {
+    public MainView(MainController mainCtrl, boolean initLoadDone) {
         initComponents();
         this.mainCtrl = mainCtrl;
-//        this.showCtrl = mainCtrl.getShowCtrl();
-        filterComboBox.setVisible(false);
-
+        this.initLoadDone = initLoadDone;
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                mainCtrl.saveFile(initLoadDone);
+                e.getWindow().dispose();
+            }
+        });
     }
 
-    public void setShowCtrl(DataController showCtrl) {
-        this.showCtrl = showCtrl;
-    }
-
-    public void setAddCtrl(AddController addCtrl) {
-        this.addCtrl = addCtrl;
-    }
-
-    public void setUpCtrl(UpdateController upCtrl) {
-        this.upCtrl = upCtrl;
+    public void setDataCtrl(DataController dataCtrl) {
+        this.dataCtrl = dataCtrl;
     }
 
     public void setDelCtrl(DeleteController delCtrl) {
@@ -58,14 +56,6 @@ public class MainView extends javax.swing.JFrame {
 
     public JTable getDataTable() {
         return dataTable;
-    }
-
-    public void setInfo(TableModel tm, String item1, String item2) {
-        dataTable.setModel(tm);
-        if (item1 != null && item2 != null) {
-            filterComboBox.addItem(item1);
-            filterComboBox.addItem(item2);
-        }
     }
 
     public void setPreferredOptions() {
@@ -116,6 +106,24 @@ public class MainView extends javax.swing.JFrame {
         dataTable.setDefaultEditor(Object.class, null);
     }
 
+    public void setData(boolean firstTime, boolean filter, TableModel tmIn, String item1, String item2) {
+        TableModel tm;
+        if (firstTime) {
+            filterComboBox.setVisible(false);
+            tm = tmIn;
+            filterComboBox.addItem(item1);
+            filterComboBox.addItem(item2);
+        } else {
+            if (!filter) {
+                tm = dataCtrl.getWarehouseDataTable(true);
+            } else {
+                tm = tmIn;
+            }
+        }
+        dataTable.setModel(tm);
+        setPreferredOptions();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -127,7 +135,7 @@ public class MainView extends javax.swing.JFrame {
 
         titleLabel = new javax.swing.JLabel();
         addButton = new javax.swing.JButton();
-        editButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         copyright = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -153,15 +161,25 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
-        editButton.setBackground(new java.awt.Color(186, 144, 200));
-        editButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
-        editButton.setText("Update Item");
-        editButton.setMaximumSize(new java.awt.Dimension(100, 25));
-        editButton.setMinimumSize(new java.awt.Dimension(100, 25));
+        updateButton.setBackground(new java.awt.Color(186, 144, 200));
+        updateButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
+        updateButton.setText("Update Item");
+        updateButton.setMaximumSize(new java.awt.Dimension(100, 25));
+        updateButton.setMinimumSize(new java.awt.Dimension(100, 25));
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
         deleteButton.setBackground(new java.awt.Color(255, 125, 135));
         deleteButton.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 12)); // NOI18N
         deleteButton.setText("Delete Item");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         copyright.setFont(new java.awt.Font("CaskaydiaCove Nerd Font", 0, 14)); // NOI18N
         copyright.setForeground(new java.awt.Color(96, 96, 173));
@@ -215,7 +233,7 @@ public class MainView extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                    .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                    .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
                     .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(filterButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(filterComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -230,7 +248,7 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addButton, deleteButton, editButton, filterButton, filterComboBox});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addButton, deleteButton, filterButton, filterComboBox, updateButton});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,7 +263,7 @@ public class MainView extends javax.swing.JFrame {
                         .addGap(156, 156, 156)
                         .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(deleteButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -257,7 +275,7 @@ public class MainView extends javax.swing.JFrame {
                 .addGap(22, 22, 22))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addButton, deleteButton, editButton, filterButton});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addButton, deleteButton, filterButton, updateButton});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -274,23 +292,45 @@ public class MainView extends javax.swing.JFrame {
 
         if (selectedItem != null && !selectedItem.isEmpty()) {
             if (!selectedItem.equalsIgnoreCase("No Filter")) {
-                tableModel = showCtrl.getWarehouseDataTableFiltered(selectedItem);
+                tableModel = dataCtrl.getWarehouseDataTableFiltered(selectedItem);
             } else {
-                // IDEA: maybe will be better a reset button, seting the original model again and also setVisible(false) comboFilter and itself (button)
-                tableModel = showCtrl.getWarehouseDataTable();
+                tableModel = dataCtrl.getWarehouseDataTable(true);
                 filterComboBox.setVisible(false);
             }
-//            dataTable.setModel(tableModel);
-            setInfo(tableModel, null, null);
-            setPreferredOptions();
+            setData(false, true, tableModel, null, null);
         }
     }//GEN-LAST:event_filterComboBoxActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // Show Add item dialog form
         this.setVisible(false);
-        mainCtrl.showAddView();
+        mainCtrl.showAddView(initLoadDone);
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        boolean anySelectedRow;
+        int selectedRowIndex, productCode, yesNoOption;
+
+        selectedRowIndex = dataTable.getSelectedRow();
+        anySelectedRow = selectedRowIndex != -1;
+        if (anySelectedRow) {
+            productCode = Integer.parseInt(dataTable.getValueAt(selectedRowIndex, 0).toString());
+            String msg = "Do you want to delete item #" + productCode + " ?";
+            yesNoOption = JOptionPane.showConfirmDialog(this, msg, "¡Deletion!", JOptionPane.YES_NO_OPTION, HEIGHT);
+            if (yesNoOption == 0) {
+                delCtrl.deleteProduct(productCode);
+                setData(false, false, dataCtrl.getWarehouseDataTable(true), null, null);
+            }
+        } else {
+            String msg = "You should select any row to delete an item.";
+            JOptionPane.showMessageDialog(this, msg, "¡Deletion!", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        this.setVisible(false);
+        mainCtrl.showUpdateView(dataTable.getValueAt(dataTable.getSelectedRow(), 0).toString(), initLoadDone);
+    }//GEN-LAST:event_updateButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -322,7 +362,7 @@ public class MainView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainView(null).setVisible(true);
+                new MainView(null, true).setVisible(true);
             }
         });
     }
@@ -332,10 +372,10 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JLabel copyright;
     private javax.swing.JTable dataTable;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JButton editButton;
     private javax.swing.JButton filterButton;
     private javax.swing.JComboBox<String> filterComboBox;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }

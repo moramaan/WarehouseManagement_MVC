@@ -4,13 +4,8 @@
  */
 package controller;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import javax.swing.*;
 import model.ProductModel;
-import model.TypeModel;
 import model.WarehouseModel;
-import view.AddView;
 
 /**
  *
@@ -20,7 +15,6 @@ public class AddController {
 
     private MainController mainCtrl;
     private WarehouseModel wh;
-    private AddView addView;
     private DataController dataCtrl;
 
     public AddController(MainController mainCtrl) {
@@ -32,28 +26,19 @@ public class AddController {
         this.dataCtrl = dataCtrl;
     }
 
-    public void setAddView(AddView addView) {
-        this.addView = addView;
-    }
-
     public void setWh(WarehouseModel wh) {
         this.wh = wh;
-    }
-
-    public void setAddViewComboItems(JComboBox cb) {
-        for (TypeModel tm : wh.getTypeList()) {
-            cb.addItem(tm.getName());
-        }
     }
 
     /**
      * It picks all form info, create a new ProductModel instance with it and
      * put product into Warehouse productsList.
+     * @return true if item is saved | false if anything goes wrong
      */
     public boolean saveNewItem() {
-        mainCtrl.setDataCtrlToAddCtrl();
+        mainCtrl.setDataCtrl();
         boolean done = false;
-        ProductModel item = new ProductModel();
+        ProductModel item;
         item = dataCtrl.craftNewProductModel();
 
         if (item != null) {
