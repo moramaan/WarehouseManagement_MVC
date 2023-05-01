@@ -31,7 +31,7 @@ public class FormView extends javax.swing.JDialog {
     private DataController dataCtrl;
     private UpdateController upCtrl;
     private int formMode;
-    private boolean initLoadDone;
+//    private boolean initLoadDone;
 
     /**
      * Creates new form AddView
@@ -40,13 +40,11 @@ public class FormView extends javax.swing.JDialog {
      * @param modal
      * @param mainCtrl
      * @param mode
-     * @param initLoadDone
      */
-    public FormView(java.awt.Frame parent, boolean modal, MainController mainCtrl, int mode, boolean initLoadDone) {
+    public FormView(java.awt.Frame parent, boolean modal, MainController mainCtrl, int mode) {
         super(parent, modal);
         this.mainCtrl = mainCtrl;
         this.formMode = mode;
-        this.initLoadDone = initLoadDone;
         initComponents();
         setDefaultConfig();
     }
@@ -401,7 +399,7 @@ public class FormView extends javax.swing.JDialog {
         }
 
         if (saved) {
-            mainCtrl.saveFile(initLoadDone);
+            mainCtrl.saveFile();
             if (formMode == 1) {
                 resetData();
             } else {
@@ -447,6 +445,8 @@ public class FormView extends javax.swing.JDialog {
         return addViewDataList;
     }
 
+    //ALL FOCUS LOST EVENTS CHECKS THE DATA IN THE FORM, CALLING DATA CONTROLLER\\
+    //Also shows a label and enable or disable save button according to the check result.
     private void codeTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codeTextFieldFocusLost
         int result = dataCtrl.checkCode(codeTextField.getText());
         switch (result) {
@@ -664,7 +664,7 @@ public class FormView extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FormView dialog = new FormView(new javax.swing.JFrame(), true, null, 0, true); // doubt with this 0, could be 1 or 2?
+                FormView dialog = new FormView(new javax.swing.JFrame(), true, null, 0);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -25,22 +25,19 @@ public class MainView extends javax.swing.JFrame {
     private MainController mainCtrl;
     private DataController dataCtrl;
     private DeleteController delCtrl;
-    private boolean initLoadDone;
 
     /**
      * Creates new form MainView
      *
      * @param mainCtrl
-     * @param initLoadDone
      */
-    public MainView(MainController mainCtrl, boolean initLoadDone) {
+    public MainView(MainController mainCtrl) {
         initComponents();
         this.mainCtrl = mainCtrl;
-        this.initLoadDone = initLoadDone;
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                mainCtrl.saveFile(initLoadDone);
+                mainCtrl.saveFile();
                 e.getWindow().dispose();
             }
         });
@@ -65,12 +62,12 @@ public class MainView extends javax.swing.JFrame {
         this.setSize(1350, 650);
 
         // Set title
-        titleLabel.setText(mainCtrl.getWh().getCompany() + "WAREHOUSE");
+        titleLabel.setText(dataCtrl.getWh().getCompany() + "WAREHOUSE");
 
-        // Set window to center
+        // Set window to the center of the screen
         this.setLocationRelativeTo(null);
 
-        // Set default table column width
+        // Set default table columns width
         TableColumnModel colModel = dataTable.getColumnModel();
         for (int i = 0; i < columns; i++) {
             TableColumn col = colModel.getColumn(i);
@@ -106,6 +103,15 @@ public class MainView extends javax.swing.JFrame {
         dataTable.setDefaultEditor(Object.class, null);
     }
 
+    /**
+     * This method fills the main view with all necessary data.
+     *
+     * @param firstTime Flag to know if is the first time that this method runs.
+     * @param filter Flag to know if filtered model is needed.
+     * @param tmIn Table model, not always needed.
+     * @param item1 Combo-box first item.
+     * @param item2 Combo-box second item.
+     */
     public void setData(boolean firstTime, boolean filter, TableModel tmIn, String item1, String item2) {
         TableModel tm;
         if (firstTime) {
@@ -280,13 +286,22 @@ public class MainView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * When the user click on filter button the program displays the combo box
+     * with the options to filter by.
+     * @param evt 
+     */
     private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterButtonActionPerformed
-        // TODO add your handling code here:
         filterComboBox.setVisible(true);
     }//GEN-LAST:event_filterButtonActionPerformed
-
+    
+    /**
+     * When the user choose one valid filter item the table model is changed by
+     * a filtered one. If default option is selected the combo box hides and standard
+     * table model is showed.
+     * @param evt 
+     */
     private void filterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterComboBoxActionPerformed
-        // Set Table Model depending on combo box item
         TableModel tableModel;
         String selectedItem = filterComboBox.getSelectedItem().toString();
 
@@ -301,12 +316,24 @@ public class MainView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_filterComboBoxActionPerformed
 
+    /**
+     * Pressing add item button shows empty form to fill its fields with new
+     * product data. Also hide main view.
+     *
+     * @param evt
+     */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        // Show Add item dialog form
         this.setVisible(false);
-        mainCtrl.showAddView(initLoadDone);
+        mainCtrl.showAddView();
     }//GEN-LAST:event_addButtonActionPerformed
 
+    /**
+     * Pressing delete button, if there is any selected row, ask confirmation to
+     * the user and then deletes the element corresponding to the first selected
+     * row. If there's not any selected row it displays an info message.
+     *
+     * @param evt
+     */
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         boolean anySelectedRow;
         int selectedRowIndex, productCode, yesNoOption;
@@ -327,9 +354,25 @@ public class MainView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
+    /**
+     * Pressing update button, if there is any selected row, open the form with
+     * the data of the element corresponding to the first selected row. If
+     * there's not any selected row it displays an info message.
+     *
+     * @param evt
+     */
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        this.setVisible(false);
-        mainCtrl.showUpdateView(dataTable.getValueAt(dataTable.getSelectedRow(), 0).toString(), initLoadDone);
+        boolean anySelectedRow;
+        int selectedRowIndex = dataTable.getSelectedRow();
+        anySelectedRow = selectedRowIndex != -1;
+
+        if (anySelectedRow) {
+            this.setVisible(false);
+            mainCtrl.showUpdateView(dataTable.getValueAt(selectedRowIndex, 0).toString());
+        } else {
+            String msg = "You should select any row to delete an item.";
+            JOptionPane.showMessageDialog(this, msg, "¡Deletion!", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_updateButtonActionPerformed
 
     /**
@@ -362,7 +405,7 @@ public class MainView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainView(null, true).setVisible(true);
+                new MainView(null).setVisible(true);
             }
         });
     }

@@ -72,13 +72,18 @@ public class WarehouseModel implements Serializable {
     }
 
     public boolean productExists(int code) {
-        return this.productsList.containsKey(code);
+        return productsList.containsKey(code);
     }
 
     public void addProduct(ProductModel p) {
         this.productsList.put(p.getId(), p);
     }
 
+    /**
+     * Delete a product from the products list.
+     * @param productKey key of the map to delete the related value.
+     * @return true if has been well removed or false if any error occurs.
+     */
     public boolean deleteProduct(int productKey) {
         boolean removed = false;
         ProductModel p = productsList.remove(productKey);

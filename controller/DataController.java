@@ -26,12 +26,10 @@ public class DataController {
     private MainView mainView;
     private FormView addView;
 
-    public DataController() {
-    }
-
     public DataController(WarehouseModel warehouse, MainView mainView, boolean initLoadDone) {
         this.warehouse = warehouse;
         this.mainView = mainView;
+        this.mainView.setDataCtrl(this);
         this.mainView.setData(true, false, getWarehouseDataTable(initLoadDone),
                 this.warehouse.getTypeList().get(0).getName(),
                 this.warehouse.getTypeList().get(1).getName());
@@ -42,6 +40,15 @@ public class DataController {
         this.addView = addView;
     }
 
+    /**
+     * This method creates the table model and returns it to assign it elsewhere
+     * as a model of the table in the main view.
+     *
+     * @param initLoadDone Depends on this, which is a flag to know if user
+     * loaded a file or not, the method add products to the model otherwise only
+     * column names.
+     * @return
+     */
     public TableModel getWarehouseDataTable(boolean initLoadDone) {
 
         TreeSet<Integer> orderedProducts = new TreeSet<>();
@@ -74,13 +81,20 @@ public class DataController {
                 row[7] = warehouse.getProduct(key).getUnitPrice();
                 row[8] = warehouse.getProduct(key).getTotal();
 
-                // Se añade al modelo la fila completa.     
                 tm.addRow(row);
             }
         }
         return tm;
     }
 
+    /**
+     * This method does almost the same that the other table model crafter but
+     * in this case filtered by the selected comboFilter.
+     *
+     * @param comboFilter Selected item, to filter by, in the main view combo
+     * box.
+     * @return The filtered table model crafted.
+     */
     public TableModel getWarehouseDataTableFiltered(String comboFilter) {
         if (comboFilter == null || comboFilter.isEmpty()) {
             return getWarehouseDataTable(true);
@@ -105,7 +119,7 @@ public class DataController {
 
                 for (Integer key : orderedProducts) {
                     category = warehouse.getProduct(key).getType().getName();
-//                System.out.println(category);
+
                     if (category.equalsIgnoreCase(comboFilter)) {
                         Object[] row = new Object[9];
 
@@ -123,9 +137,7 @@ public class DataController {
                     }
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println(e.getLocalizedMessage());
-                e.printStackTrace();
+                System.out.println("Internal error, try again or contact support.");
             }
             return tm;
         }
@@ -134,6 +146,104 @@ public class DataController {
     public void setNewMainViewTableModel() {
         mainView.getDataTable().setModel(getWarehouseDataTable(true));
         mainView.setPreferredOptions();
+    }
+
+    /**
+     * This method fill the combo box from the type list in Warehouse class.
+     *
+     * @param cb combo box element, provided by a view.
+     */
+    public void setFormComboItems(JComboBox cb) {
+        for (TypeModel tm : warehouse.getTypeList()) {
+            cb.addItem(tm.getName());
+        }
+    }
+
+    /**
+     * This method crafts a new product model instance, getting the data from
+     * the form view and then returns it.
+     *
+     * @return Crafted new Product Model instance.
+     */
+    public ProductModel craftNewProductModel() {
+        TypeModel tm = null;
+        ProductModel pm = null;
+        boolean selfSell = false;
+        double price = 0;
+        ArrayList<Object> addViewDataList = addView.getFormViewData();
+        String name, type, location, category;
+        int code, qty;
+
+        name = type = location = category = "";
+        code = qty = 0;
+
+        try {
+            for (Object o : addViewDataList) {
+                switch (addViewDataList.indexOf(o)) {
+                    case 0:
+                        code = Integer.parseInt(o.toString());
+                        break;
+                    case 1:
+                        name = o.toString();
+                        break;
+                    case 2:
+                        type = o.toString();
+                        break;
+                    case 3:
+                        location = o.toString();
+                        break;
+                    case 4:
+                        category = o.toString();
+                        break;
+                    case 5:
+                        qty = Integer.parseInt(o.toString());
+                        break;
+                    case 6:
+                        selfSell = Boolean.parseBoolean(o.toString());
+                        break;
+                    default:
+                        price = Double.parseDouble(o.toString());
+
+                }
+            }
+            tm = new TypeModel(type);
+            pm = new ProductModel(code, name, tm, location, category, qty, selfSell, price);
+        } catch (Exception e) {
+            System.out.println("Internal error, sorry...");
+        }
+        return pm;
+    }
+
+    public boolean productExists(int id) {
+        return warehouse.productExists(id);
+    }
+
+    public ProductModel getProduct(int id) {
+        return warehouse.getProduct(id);
+    }
+
+    /**
+     * Delete a product from the warehouse products list.
+     *
+     * @param productId Id of the product to be deleted.
+     * @return True if product were been well removed or false if any error
+     * occurs.
+     */
+    public boolean deleteProduct(int productId) {
+        return warehouse.deleteProduct(productId);
+    }
+
+    /**
+     * Adds to warehouse products list a new Product.
+     *
+     * @param p Instance of the Product Model to be added.
+     */
+    public void addProduct(ProductModel p) {
+        warehouse.addProduct(p);
+    }
+
+    public WarehouseModel getWh() {
+        return warehouse;
     }
 
     /**
@@ -202,7 +312,7 @@ public class DataController {
 
     /**
      * Method to check if a given String is an Integer and also if is between
-     * the setted bounds.
+     * the given bounds.
      *
      * @param txt value to be checked
      * @param min lowerBound
@@ -233,6 +343,15 @@ public class DataController {
         return result;
     }
 
+    /**
+     * Method to check if a given String is a double or not. If it is, should be
+     * between the given bounds.
+     *
+     * @param txt value to be checked
+     * @param min lowerBound
+     * @param max upperBound
+     * @return
+     */
     public int isDouble(String txt, double min, double max) {
         boolean valid = true;
         int result = 0;
@@ -255,66 +374,5 @@ public class DataController {
             }
         }
         return result;
-    }
-
-    public void setFormComboItems(JComboBox cb) {
-        for (TypeModel tm : warehouse.getTypeList()) {
-            cb.addItem(tm.getName());
-        }
-    }
-
-    public ProductModel craftNewProductModel() {
-        TypeModel tm = null;
-        ProductModel pm = null;
-        boolean selfSell = false;
-        double price = 0;
-        ArrayList<Object> addViewDataList = addView.getFormViewData();
-        String name, type, location, category;
-        int code, qty;
-
-        name = type = location = category = "";
-        code = qty = 0;
-
-        try {
-            for (Object o : addViewDataList) {
-                switch (addViewDataList.indexOf(o)) {
-                    case 0:
-                        code = Integer.parseInt(o.toString());
-                        break;
-                    case 1:
-                        name = o.toString();
-                        break;
-                    case 2:
-                        type = o.toString();
-                        break;
-                    case 3:
-                        location = o.toString();
-                        break;
-                    case 4:
-                        category = o.toString();
-                        break;
-                    case 5:
-                        qty = Integer.parseInt(o.toString());
-                        break;
-                    case 6:
-                        selfSell = Boolean.parseBoolean(o.toString());
-                        break;
-                    default:
-                        price = Double.parseDouble(o.toString());
-
-                }
-            }
-            tm = new TypeModel(type);
-            pm = new ProductModel(code, name, tm, location, category, qty, selfSell, price);
-        } catch (Exception e) {
-            System.out.println("craftModel Method" + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return pm;
-    }
-
-    public boolean deleteProduct(int productId) {
-        return warehouse.deleteProduct(productId);
     }
 }

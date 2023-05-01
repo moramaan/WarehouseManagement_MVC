@@ -4,19 +4,15 @@
  */
 package controller;
 
-import view.MainView;
-
 /**
  *
  * @author moraman
  */
 public class DeleteController {
 
-    private MainView mainView;
     private DataController dataCtrl;
 
-    public DeleteController(MainView mainView, DataController dataCtrl) {
-        this.mainView = mainView;
+    public DeleteController(DataController dataCtrl) {
         this.dataCtrl = dataCtrl;
     }
 

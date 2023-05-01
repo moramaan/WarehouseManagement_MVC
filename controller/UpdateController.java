@@ -26,10 +26,13 @@ public class UpdateController {
         this.dataCtrl = dataCtrl;
     }
 
+    /**
+     * This method loads the product data, which comes from the selected item in
+     * the main view, into the form view.
+     */
     public void loadFormData() {
-        ProductModel selectedProduct = wh.getProduct(Integer.valueOf(selectedCode));
+        ProductModel selectedProduct = dataCtrl.getProduct(Integer.parseInt(selectedCode));
 
-        System.out.println(selectedCode);
         updateView.getCodeTextField().setText(Integer.toString(selectedProduct.getId()));
         updateView.getCodeTextField().setEnabled(false);
         updateView.getNameTextField().setText(selectedProduct.getName());
@@ -51,25 +54,30 @@ public class UpdateController {
         }
     }
 
+    /**
+     * This method saves the updated item in the Warehouse product list instead
+     * of the outdated one.
+     *
+     * @return true or false depending on the save action is done or not.
+     */
     public boolean saveUpdatedItem() {
         boolean saved = true;
-        ProductModel updatedProduct, storedProduct, test;
+        ProductModel updatedProduct, storedProduct;
 
         updatedProduct = dataCtrl.craftNewProductModel();
         storedProduct = wh.getProduct(updatedProduct.getId());
         try {
-            wh.deleteProduct(storedProduct.getId());
-            if (!wh.productExists(storedProduct.getId())) {
-                wh.addProduct(updatedProduct);
+            dataCtrl.deleteProduct(storedProduct.getId());
+
+            if (!dataCtrl.productExists(storedProduct.getId())) {
+                dataCtrl.addProduct(updatedProduct);
             } else {
-                throw new Exception("Deletion of the map, previous to update, not works fine");
+                throw new Exception();
             }
-//            storedProduct = updatedProduct;
         } catch (Exception e) {
             saved = false;
-            System.out.println(e.getMessage());
+            System.out.println("Internal error, not saved.");
         }
-
         return saved;
     }
 }

@@ -5,7 +5,6 @@
 package controller;
 
 import model.ProductModel;
-import model.WarehouseModel;
 
 /**
  *
@@ -14,7 +13,6 @@ import model.WarehouseModel;
 public class AddController {
 
     private MainController mainCtrl;
-    private WarehouseModel wh;
     private DataController dataCtrl;
 
     public AddController(MainController mainCtrl) {
@@ -26,24 +24,20 @@ public class AddController {
         this.dataCtrl = dataCtrl;
     }
 
-    public void setWh(WarehouseModel wh) {
-        this.wh = wh;
-    }
-
     /**
-     * It picks all form info, create a new ProductModel instance with it and
+     * It takes all form info, create a new ProductModel instance with it and
      * put product into Warehouse productsList.
+     *
      * @return true if item is saved | false if anything goes wrong
      */
     public boolean saveNewItem() {
-        mainCtrl.setDataCtrl();
         boolean done = false;
         ProductModel item;
         item = dataCtrl.craftNewProductModel();
 
         if (item != null) {
             done = true;
-            wh.addProduct(item);
+            dataCtrl.addProduct(item);
         }
 
         return done;
